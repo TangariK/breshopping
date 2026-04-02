@@ -1,0 +1,33 @@
+# Ambiente local: PostgreSQL + app (build da imagem Docker).
+# Uso: docker compose up --build
+# Migrações SQL: aplicar db/migrations/*.sql no banco (ver docs/database/README.md).
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: breshopping
+      POSTGRES_PASSWORD: breshopping
+      POSTGRES_DB: breshopping_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - breshopping_pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://breshopping:breshopping@db:5432/breshopping_db
+      JWT_SECRET: ${JWT_SECRET:-dev-change-me-in-production}
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    depends_on:
+      - db
+
+volumes:
+  breshopping_pgdata:
