@@ -1,0 +1,32 @@
+---
+description: Regras do repositório Breshopping para o assistente Cursor
+globs: "**/*"
+alwaysApply: true
+---
+
+## Antes de implementar
+
+1. Leia **PROJECT_RULES.md** e **docs/architecture/README.md**.
+2. Para mudanças de banco: tente **MCP Postgres**; se DDL não for permitido, use **db/migrations/** e confirme com o usuário após execução.
+3. Antes de criar componentes ou endpoints: procure reutilização em **src/components/** e **src/app/api/**.
+
+## Documentação
+
+- Toda documentação nova no repo deve ser **`.md`**.
+- Grandes entregas: crie/atualize pasta em **docs/versions/** seguindo **docs/versions/README.md**.
+- Antes de commit: **docs/commit/COMMIT_STANDARD.md**.
+
+## Versionamento documental (resumo)
+
+- Patch pequeno: ex. **0.0.1 → 0.0.11** (ou próximo patch acordado).
+- Nova tela/feature: **0.0.2**+.
+- Sistema quase reescrito: **0.1.0**; marco maior: **1.0.0**.
+
+## Qualidade
+
+- Após implementações grandes ou sequência de mudanças: rode **npm run build** e **npm run lint**.
+- Antis: refatoração/indentação massiva sem necessidade; commits poluídos.
+
+## Comentários
+
+- Novos módulos/serviços precisam de comentário explicando **propósito** e **fluxo** (ver PROJECT_RULES.md).
