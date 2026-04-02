@@ -52,7 +52,7 @@ export async function registerTenantAndAdmin(
     await client.query(
       `INSERT INTO suppliers (tenant_id, name, supplier_type, contact_info)
        VALUES ($1, $2, $3, $4::jsonb)`,
-      [tenantId, DEFAULT_SUPPLIER_NAME, "internal", JSON.stringify({ source: "default" })],
+      [tenantId, DEFAULT_SUPPLIER_NAME, "donativo", JSON.stringify({ source: "default" })],
     );
 
     const hash = await bcrypt.hash(body.password, 10);
