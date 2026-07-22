@@ -1,34 +1,50 @@
 # Breshopping
 
-Repositório público do **Breshopping**: painel web multi-tenant para gestão de brechó (peças únicas) — cadastro do negócio, inventário, catalogação rápida e acompanhamento de valores.
+Multi-tenant SaaS for thrift-store management — business onboarding, inventory of unique items, fast cataloging, and price tracking.
 
-Projeto por **Kauã Tangari**.
+Built by **[Kauã Tangari](https://github.com/TangariK)**.
+
+## Problem
+
+Thrift stores deal with **unique pieces**, not SKUs. Generic inventory tools force workarounds. Breshopping gives each shop its own tenant space with catalog, inventory filters, and price history built for that model.
 
 ## Stack
 
 - **Next.js** 16 (App Router) + **React** 19 + **TypeScript**
 - **Tailwind CSS** v4
 - **PostgreSQL** (driver `pg`)
-- Autenticação **JWT** em cookie httpOnly (`jose` + `bcryptjs`)
-- Validação com **Zod**
+- Auth: **JWT** in httpOnly cookie (`jose` + `bcryptjs`)
+- Validation: **Zod**
+- Deploy: **Docker** / `docker compose`
 
-## Início rápido
+## Technical decisions
+
+| Choice | Why |
+|--------|-----|
+| Multi-tenant via URL slug (`/[tenantSlug]/…`) | Clear isolation per shop without a separate app per customer |
+| JWT in httpOnly cookie | Avoids XSS exposure of tokens in `localStorage` |
+| SQL migrations + documented schema | Explicit control over tenant settings, tags, and price history |
+| Atomic Design + feature folders | Keeps UI and domain logic navigable as the MVP grows |
+
+What I'd improve next: live demo deploy, richer inventory UX, and tighter test coverage around auth/tenant boundaries.
+
+## Quick start
 
 ```bash
 cp .env.example .env.local
-# Preencha DATABASE_URL e JWT_SECRET (mín. 16 caracteres em produção)
+# Set DATABASE_URL and JWT_SECRET (min. 16 chars in production)
 
 npm install
 npm run dev
 ```
 
-Aplique a migração SQL antes de usar cadastro/login:
+Apply the SQL migration before signup/login:
 
 ```bash
 psql "$DATABASE_URL" -f db/migrations/001_mvp_auth_tenant_settings.sql
 ```
 
-Detalhes do schema: [docs/database/README.md](docs/database/README.md).
+Schema details: [docs/database/README.md](docs/database/README.md).
 
 ## Docker
 
@@ -36,24 +52,24 @@ Detalhes do schema: [docs/database/README.md](docs/database/README.md).
 docker compose up --build
 ```
 
-Guia: [docs/docker/README.md](docs/docker/README.md).
+Guide: [docs/docker/README.md](docs/docker/README.md).
 
-## Documentação
+## Docs
 
-- Índice: [docs/README.md](docs/README.md)
-- Arquitetura (Atomic Design + features + SOLID): [docs/architecture/README.md](docs/architecture/README.md)
-- Versão documental **0.0.1** (MVP): [docs/versions/0.0.1/README.md](docs/versions/0.0.1/README.md)
-- Regras do repositório (humanos e IA): [PROJECT_RULES.md](PROJECT_RULES.md)
+- Index: [docs/README.md](docs/README.md)
+- Architecture: [docs/architecture/README.md](docs/architecture/README.md)
+- MVP **0.0.1**: [docs/versions/0.0.1/README.md](docs/versions/0.0.1/README.md)
+- Project rules: [PROJECT_RULES.md](PROJECT_RULES.md)
 
 ## Scripts
 
-| Comando | Descrição |
-|---------|-----------|
-| `npm run dev` | Desenvolvimento |
-| `npm run build` | Build de produção |
-| `npm run start` | Servidor após build |
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development |
+| `npm run build` | Production build |
+| `npm run start` | Serve after build |
 | `npm run lint` | ESLint |
 
-## Licença
+## License
 
-Ver arquivo [LICENSE](LICENSE) na raiz (se aplicável).
+[MIT](LICENSE)
